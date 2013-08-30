@@ -1,0 +1,19 @@
+{
+  "name": "Space",
+  "version": "0.0.1",
+  "dependencies": {
+    "express": "*",
+    "coffee-script": "*",
+    "request": "*",
+    "norman": "git://github.com/secaglobal/nORM.git#develop",
+    "q": "*",
+    "underscore": "*",
+    "MD5": "*"
+  },
+  "devDependencies": {
+    "node-dev": "*",
+    "mocha": "*",
+    "sinon": "*",
+    "chai": "*"
+  }
+}
