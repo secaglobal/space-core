@@ -1,5 +1,5 @@
 {
-  "name": "space",
+  "name": "space-core",
   "version": "0.2.4",
   "dependencies": {
     "express": "*",
