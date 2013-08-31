@@ -1,11 +1,11 @@
 {
-  "name": "Space",
+  "name": "space",
   "version": "0.2.3",
   "dependencies": {
     "express": "*",
     "coffee-script": "*",
     "request": "*",
-    "norman": "git://github.com/secaglobal/nORM.git#develop",
+    "norman": "git://github.com/secaglobal/norman.git",
     "q": "*",
     "underscore": "*",
     "MD5": "*"
