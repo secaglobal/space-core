@@ -21,7 +21,7 @@ class Response
         @renderParams @output, params unless fn?
         @["render#{@output.toUpperCase()}"]()
 
-    error: (@_error, @_errorNr) ->
+    error: (@_error, @_errorDetails) ->
         @
 
     _prepareCallback: (fn)->
@@ -36,9 +36,9 @@ class Response
         @res.send @_handlers[@output] or @_handlers.JSON[0]
 
     renderFULL: () ->
-        res = status: !@_error and !@_errorNr
+        res = status: !@_error
         res.error = @_error if @_error
-        res.errorNr = @_errorNr if @_errorNr
+        res.errorDetails = @_errorDetails if @_errorDetails
         res.response = @_handlers[@output][0] || {} if res.status
 
         @res.send res or @_handlers.FULL[0]
