@@ -30,7 +30,6 @@ class Router
         for method, conf of map
             @route conf.pattern or "#{prefix}/#{method}", method, cont, conf.method or 'get'
 
-
         #html
         @route "#{prefix}", 'index', cont, 'get', 'HTML' if not map.index? and cont.index?
         @route "#{prefix}/new", 'new', cont, 'get', 'HTML' if not map.new? and cont.new?

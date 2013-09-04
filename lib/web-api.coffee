@@ -33,6 +33,6 @@ class WebAPI
         if not @isAccessAllowed(action)
             return @response.error('ACCESS_DENIED').render()
 
-        @[action]()
+        @[action](@params, @response, @request)
 
 module.exports = WebAPI

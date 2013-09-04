@@ -92,3 +92,7 @@ describe '@WebAPI', () ->
         it 'should execute action if access allowed', () ->
             this._contr.execute('publicAction')
             expect(this._contr.publicAction.called).be.ok
+
+        it 'should pass correct parameters', () ->
+            this._contr.execute('publicAction')
+            expect(this._contr.publicAction.calledWith({}, this._res, this._req)).be.ok
