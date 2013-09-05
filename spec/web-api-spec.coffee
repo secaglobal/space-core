@@ -1,5 +1,6 @@
 WebAPI = require "#{LIBS_PATH}/web-api"
 Response = require "#{LIBS_PATH}/response"
+Exception = require "#{LIBS_PATH}/exception"
 
 class TestAPI extends WebAPI
     @map:
@@ -12,6 +13,9 @@ class TestAPI extends WebAPI
     clientAction: () -> true
     guestAction: () -> true
     deniedAction: () -> true
+    exceptionAction: () -> throw new Exception 'CODE', 'Comments'
+    stringExceptionAction: () -> throw 'CODE'
+    systemExceptionAction: () -> throw new Error 'CODE'
 
     route: (action) ->
         if action is 'aliasAction' then 'publicAction' else super
@@ -25,6 +29,7 @@ describe '@WebAPI', () ->
 
         sinon.spy this._contr, 'publicAction'
         sinon.spy this._contr, 'clientAction'
+        sinon.spy this._res, 'error'
         sinon.spy this._res, 'render'
 
     describe '#isAccessAllowed', () ->
@@ -96,3 +101,18 @@ describe '@WebAPI', () ->
         it 'should pass correct parameters', () ->
             this._contr.execute('publicAction')
             expect(this._contr.publicAction.calledWith({}, this._res, this._req)).be.ok
+
+        it 'should catch all exceptions and fail request', () ->
+            this._contr.execute('exceptionAction')
+            expect(@_res.error.calledWith 'CODE').be.ok
+            expect(@_res.render.called).be.ok
+
+        it 'should catch all stringified exceptions and fail request', () ->
+            this._contr.execute('stringExceptionAction')
+            expect(@_res.error.calledWith 'CODE').be.ok
+            expect(@_res.render.called).be.ok
+
+        it 'should catch all system exceptions and fail request', () ->
+            this._contr.execute('systemExceptionAction')
+            expect(@_res.error.calledWith 'CODE').be.ok
+            expect(@_res.render.called).be.ok
