@@ -25,22 +25,23 @@ class Router
 
     _processController: (prefix, path) ->
         cont = require(path)
+        actoins = cont.prototype
         map = cont.map or {}
 
         for method, conf of map
             @route conf.pattern or "#{prefix}/#{method}", method, cont, conf.method or 'get'
 
         #html
-        @route "#{prefix}", 'index', cont, 'get', 'HTML' if not map.index? and cont.index?
-        @route "#{prefix}/new", 'new', cont, 'get', 'HTML' if not map.new? and cont.new?
-        @route "#{prefix}/:id/edit", 'edit', cont, 'get', 'HTML' if not map.edit? and cont.edit?
+        @route "#{prefix}", 'index', cont, 'get', 'HTML' if not map.index? and actoins.index?
+        @route "#{prefix}/new", 'new', cont, 'get', 'HTML' if not map.new? and actoins.new?
+        @route "#{prefix}/:id/edit", 'edit', cont, 'get', 'HTML' if not map.edit? and actoins.edit?
 
         #api - json
-        @route "#{prefix}/list", 'list', cont, 'get' if not map.list? and cont.list?
-        @route "#{prefix}", 'create', cont, 'post' if not map.create? and cont.create?
-        @route "#{prefix}/:id", 'show', cont, 'get' if not map.show? and cont.show?
-        @route "#{prefix}/:id", 'update', cont, 'put' if not map.update? and cont.update?
-        @route "#{prefix}/:id", 'delete', cont, 'delete' if not map.delete? and cont.delete?
+        @route "#{prefix}/list", 'list', cont, 'get' if not map.list? and actoins.list?
+        @route "#{prefix}", 'create', cont, 'post' if not map.create? and actoins.create?
+        @route "#{prefix}/:id", 'show', cont, 'get' if not map.show? and actoins.show?
+        @route "#{prefix}/:id", 'update', cont, 'put' if not map.update? and actoins.update?
+        @route "#{prefix}/:id", 'delete', cont, 'delete' if not map.delete? and actoins.delete?
 
     _readControllersDir: (path, prefix = '', uri = '') ->
         _this = @
