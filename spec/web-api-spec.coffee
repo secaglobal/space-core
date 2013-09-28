@@ -1,3 +1,4 @@
+Q = require 'Q'
 WebAPI = require "#{LIBS_PATH}/web-api"
 Response = require "#{LIBS_PATH}/response"
 Exception = require "#{LIBS_PATH}/exception"
@@ -9,6 +10,8 @@ class TestAPI extends WebAPI
         guestAction: {access: WebAPI.ACCESS__GUEST},
         deniedAction: {access: WebAPI.ACCESS__DENIED | WebAPI.ACCESS__ALL}
 
+    setDeferred: (@deferred) ->
+
     publicAction: () -> true
     clientAction: () -> true
     guestAction: () -> true
@@ -16,6 +19,7 @@ class TestAPI extends WebAPI
     exceptionAction: () -> throw new Exception 'CODE', 'Comments'
     stringExceptionAction: () -> throw 'CODE'
     systemExceptionAction: () -> throw new Error 'CODE'
+    promiseError: () -> @deferred.promise
 
     route: (action) ->
         if action is 'aliasAction' then 'publicAction' else super
@@ -23,9 +27,10 @@ class TestAPI extends WebAPI
 
 describe '@WebAPI', () ->
     beforeEach () ->
-        this._res = new Response(send: () -> true)
-        this._req = {}
-        this._contr = new TestAPI({}, this._res, this._req)
+        @deferred = Q.defer()
+        @_res = new Response(send: () -> true)
+        @_req = {}
+        @_contr = new TestAPI({}, this._res, this._req)
 
         sinon.spy this._contr, 'publicAction'
         sinon.spy this._contr, 'clientAction'
@@ -116,3 +121,18 @@ describe '@WebAPI', () ->
             this._contr.execute('systemExceptionAction')
             expect(@_res.error.calledWith 'CODE').be.ok
             expect(@_res.render.called).be.ok
+
+        it 'should react on fail if returned promise', (done) ->
+            this._contr.setDeferred(Q.defer())
+            this._contr.execute('promiseError')
+
+            res = @_res
+            this._contr.deferred.promise.fin () ->
+                try
+                    expect(res.error.calledWith 'CODE').be.ok
+                    expect(res.render.called).be.ok
+                    done()
+                catch e
+                    done e
+
+            this._contr.deferred.reject new Exception 'CODE', 'Comments'

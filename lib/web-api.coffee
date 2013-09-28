@@ -1,3 +1,5 @@
+Q = require 'Q'
+
 class WebAPI
     @ACCESS__DENIED: 1
     @ACCESS__GUEST: 2
@@ -34,8 +36,12 @@ class WebAPI
             return @response.error('ACCESS_DENIED').render()
 
         try
-            @[action](@params, @response, @request)
+            res = @[action](@params, @response, @request)
+            res.fail @_renderErrorResponse.bind(@) if Q.isPromiseAlike res
         catch err
-            @response.error(err.code || err.message || err).render()
+            @_renderErrorResponse(err)
+
+    _renderErrorResponse: (err) ->
+        @response.error(err.code || err.message || err).render()
 
 module.exports = WebAPI
