@@ -1,4 +1,4 @@
-Q = require 'Q'
+Q = require 'q'
 
 class WebAPI
     @ACCESS__DENIED: 1

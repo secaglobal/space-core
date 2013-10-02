@@ -1,4 +1,4 @@
-Q = require 'Q'
+Q = require 'q'
 WebAPI = require "#{LIBS_PATH}/web-api"
 Response = require "#{LIBS_PATH}/response"
 Exception = require "#{LIBS_PATH}/exception"
