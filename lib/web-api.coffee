@@ -6,8 +6,8 @@ class WebAPI
     @ACCESS__CLIENT: 4
     @ACCESS__ALL: 6
 
-    @METHOD__GET: 'GET'
-    @METHOD__POST: 'POST'
+    @METHOD__GET: 'get'
+    @METHOD__POST: 'post'
 
     @map: {}
 
