@@ -10,9 +10,11 @@ class Router
     makeHandler: (action, controller, output = 'FULL') ->
         (req, res)->
             params = {}
+            params[param] = value for param, value of req.cookies
             params[param] = value for param, value of req.query
-            params[param] = value for param, value of req.params
             params[param] = value for param, value of req.body
+            params[param] = value for param, value of req.params
+            params.uploadedFiles = req.files if req.files
 
             controller = require(controller) if typeof controller is 'string'
             new controller(params, new Response(res, output), req).execute(action)
